@@ -57,7 +57,7 @@ public class BoardController {
 	// 수정폼
 	@RequestMapping(value="/board/modifyform", method = {RequestMethod.GET, RequestMethod.POST})
 	public String modifyForm(@RequestParam(value="no") int no, Model model) {
-		model.addAttribute("selectOneVo",boardService.exeRead(no));
+		model.addAttribute("selectOneVo",boardService.exeModifyForm(no));
 		return "board/modifyForm";
 	}
 	

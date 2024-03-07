@@ -31,9 +31,14 @@ public class BoardService {
 		return count;
 	}
 	
-	// 한명데이터 가져오기
+	// 한명데이터 가져오기 - read 
 	public BoardVo exeRead(int no) {
-		boardDao.updateHit(no); // 조회수 업데이트
+		boardDao.updateHit(no);
+		return boardDao.selectOne(no);
+	}
+	
+	// 한명데이터 가져오기 - modifyForm
+	public BoardVo exeModifyForm(int no) {
 		return boardDao.selectOne(no);
 	}
 	
@@ -43,4 +48,8 @@ public class BoardService {
 		return count;
 	}
 	
+	// 조회수 올리기
+	public int exeUpdateHit(int no) {
+		return boardDao.updateHit(no); // 조회수 업데이트
+	}
 }
