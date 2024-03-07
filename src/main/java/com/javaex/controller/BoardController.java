@@ -67,4 +67,6 @@ public class BoardController {
 		boardService.exeModify(boardVo);
 		return "redirect:/board/list";
 	}
+	
+	
 }

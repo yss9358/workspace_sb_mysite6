@@ -38,5 +38,10 @@ public class BoardDao {
 	public int update(BoardVo boardVo) {
 		return sqlSession.update("board.update", boardVo);
 	}
+	
+	// 조회수 업데이트
+	public int updateHit(int no) {
+		return sqlSession.update("board.updateHit", no);
+	}
 }
 

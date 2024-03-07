@@ -33,6 +33,7 @@ public class BoardService {
 	
 	// 한명데이터 가져오기
 	public BoardVo exeRead(int no) {
+		boardDao.updateHit(no); // 조회수 업데이트
 		return boardDao.selectOne(no);
 	}
 	
@@ -41,4 +42,5 @@ public class BoardService {
 		int count = boardDao.update(boardVo);
 		return count;
 	}
+	
 }
