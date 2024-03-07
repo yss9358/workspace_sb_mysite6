@@ -42,7 +42,7 @@ public class BoardController {
 	
 	// 삭제
 	@RequestMapping(value="/board/delete", method = {RequestMethod.GET, RequestMethod.POST})
-	public String delete(@RequestParam(value="no") int no) {
+	public String delete(@RequestParam(value="no")int no) {
 		boardService.exeDelete(no);
 		return "redirect:/board/list";
 	}
