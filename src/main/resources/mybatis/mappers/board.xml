@@ -23,8 +23,8 @@
 		]]>
 	</select>
 	
-	<!-- 한명 데이터 가져오기 -->
-	<select id="selectOne" parameterType="int" resultType="com.javaex.vo.BoardVo">
+	<!-- (no) 이용해서 한명 데이터 가져오기 -->
+	<select id="selectOneByNo" parameterType="int" resultType="com.javaex.vo.BoardVo">
 		<![CDATA[
 			select	b.no ,
 					b.title,
@@ -37,6 +37,24 @@
 			inner join users u
 					on b.user_no = u.no
 			where b.no = #{no}
+		]]>
+	</select>
+	
+	<!-- (name) 이용해서 한명 데이터 가져오기 -->
+	<select id="selectByName" parameterType="String" resultType="com.javaex.vo.BoardVo">
+		<![CDATA[
+			select  b.no ,
+					b.title,
+			        b.hit,
+			        b.reg_date regDate,
+			        b.user_no userNo,
+			        u.name name
+			from board b
+			inner join users u
+					on b.user_no = u.no
+			where name = #{name}
+			order by no desc
+			limit 10
 		]]>
 	</select>
 

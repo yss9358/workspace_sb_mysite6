@@ -1,7 +1,5 @@
 package com.javaex.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +20,7 @@ public class BoardController {
 	// 리스트폼 - 리스트 가져오기 
 	@RequestMapping(value="/board/list", method = {RequestMethod.GET, RequestMethod.POST})
 	public String list(Model model) {
-		List<BoardVo> boardList =boardService.exeList();
-		model.addAttribute("boardList",boardList);
+		model.addAttribute("boardList",boardService.exeList());
 		return "board/list";
 	}
 	
@@ -68,5 +65,10 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	
+	// 이름으로 검색
+	@RequestMapping(value="/board/search", method = {RequestMethod.GET, RequestMethod.POST})
+	public String search(@RequestParam(value="name") String name, Model model) {
+		model.addAttribute("boardList",boardService.exeSearchByName(name));
+		return "board/list";
+	}
 }

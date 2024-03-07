@@ -30,8 +30,8 @@ public class BoardDao {
 	}
 	
 	// 읽기 - 한명데이터 가져오기
-	public BoardVo selectOne(int no) {
-		return sqlSession.selectOne("board.selectOne", no);
+	public BoardVo selectOneByNo(int no) {
+		return sqlSession.selectOne("board.selectOneByNo", no);
 	}
 	
 	// 수정
@@ -42,6 +42,11 @@ public class BoardDao {
 	// 조회수 업데이트
 	public int updateHit(int no) {
 		return sqlSession.update("board.updateHit", no);
+	}
+	
+	// 이름으로 검색
+	public List<BoardVo> selectByName(String name) {
+		return sqlSession.selectList("selectByName", name);
 	}
 }
 
