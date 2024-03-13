@@ -37,10 +37,20 @@ public class GuestbookController {
 		return "guestbook/deleteForm";
 	}
 	
-	//삭제
+	// 삭제
 	@RequestMapping(value="/guest/delete", method = {RequestMethod.GET, RequestMethod.POST})
 	public String delete(@ModelAttribute GuestbookVo guestbookVo) {
 		guestbookService.exeDelete(guestbookVo);
 		return "redirect:/guest/list";
 	}
+	
+	// ajax 방명록 메인
+	@RequestMapping(value="/guest/ajaxindex", method = {RequestMethod.GET, RequestMethod.POST})
+	public String ajaxIndex() {
+		System.out.println("controller>ajaxIndex");
+		return "guestbook/ajaxIndex";
+	}
+	
+	
+	
 }

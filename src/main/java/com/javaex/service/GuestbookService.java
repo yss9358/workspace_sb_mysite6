@@ -17,7 +17,6 @@ public class GuestbookService {
 	// 리스트가져오기
 	public List<GuestbookVo> exeList() {
 		return guestbookDao.list();
-		
 	}
 	
 	// 등록
