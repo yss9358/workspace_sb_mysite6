@@ -72,27 +72,9 @@
 						<!-- //guestWrite -->
 						
 					</form>	
-					<%-- <c:forEach items="${guestbookList}" var="gbList">
-						<table class="guestRead">
-							<colgroup>
-								<col style="width: 10%;">
-								<col style="width: 40%;">
-								<col style="width: 40%;">
-								<col style="width: 10%;">
-							</colgroup>
-							<tr>
-								<td>${gbList.no}</td>
-								<td>${gbList.name}</td>
-								<td>${gbList.regDate}</td>
-								<td><a href="${pageContext.request.contextPath}/guest/deleteform?no=${gbList.no}">[삭제]</a></td>
-							</tr>
-							<tr>
-								<td colspan=4 class="text-left">${gbList.content}</td>
-							</tr>
-						</table>
-						<!-- //guestRead -->
-					</c:forEach>  --%>
-					
+					<div id="guestbookListArea">
+						<!-- 방명록 글 올 자리 -->
+					</div>
 				</div>
 				<!-- //guestbook -->
 			
@@ -115,7 +97,7 @@ document.addEventListener("DOMContentLoaded",function(){
 	// 리스트요청 데이터 받기
 	axios({
 		method: 'get', // put, post, delete 
-		url: '/mysite6/api/guestbooks',
+		url: '${pageContext.request.contextPath}/api/guestbooks',
 		headers: {"Content-Type" : "application/json; charset=utf-8"}, //전송타입 
 		//params: guestbookVo, //get방식 파라미터로 값이 전달 
 		//data: guestbookVo, //put, post, delete 방식 자동으로 JSON으로 변환 전달 
@@ -128,11 +110,8 @@ document.addEventListener("DOMContentLoaded",function(){
 		// 리스트 자리에 글 추가 ..
 		for(let i=0; i<response.data.length; i++){
 			let guestbookVo = response.data[i]
-			render(guestbookVo);
+			render(guestbookVo); // render() 함수를 만들어서 실행시킨다
 		}
-	 	render(); // render() 함수를 만들어서 실행시킨다 
-	
-		
 	}).catch(function (error) {
 		console.log(error);
 	}); 
@@ -142,7 +121,32 @@ document.addEventListener("DOMContentLoaded",function(){
 
 //////////////////////////// 함수 정리 ///////////////////////////////////////////////
 function render(guestbookVo){
-	console.log(guestbookVo);
+	//console.log(guestbookVo); 
+	
+	let guestbookListArea = document.querySelector("#guestbookListArea");
+	//console.log(guestbookListArea);
+	//  ${pageContext.request.contextPath} 는 자바문법. 자바스크립트에서 사용할 수 있다.
+	let str = '';
+	str += ' <table class="guestRead"> ';
+	str += ' 	<colgroup> ';
+	str += ' 		<col style="width: 10%;"> ';
+	str += ' 		<col style="width: 40%;"> ';
+	str += ' 		<col style="width: 40%;"> ';
+	str += ' 		<col style="width: 10%;"> ';
+	str += '	 </colgroup> ';
+	str += ' 	 <tr>';
+	str += ' 		<td>' + guestbookVo.no + '</td> ';
+	str += ' 		<td>' + guestbookVo.name + '</td> ';
+	str += ' 		<td>' + guestbookVo.regDate + '</td> ';
+	str += ' 		<td><a href="${pageContext.request.contextPath}/guest/delete">[삭제]</a></td> ';
+	str += ' 	 </tr> ';
+	str += ' 	 <tr> ';
+	str += ' 		<td colspan=4 class="text-left">' + guestbookVo.content +'</td> ';
+	str += ' 	 </tr> ';
+	str += ' </table> ';
+	
+	guestbookListArea.insertAdjacentHTML("beforeend",str);
+	
 };
 //////////////////////////// 함수 정리 끝 ////////////////////////////////////////////
 </script>
