@@ -31,4 +31,16 @@ public class GuestbookService {
 		return count;
 	}
 	
+	// ajax 등록
+	public GuestbookVo exeAddAndGuest(GuestbookVo guestbookVo) {
+		guestbookDao.insertSelectKey(guestbookVo);
+		return guestbookDao.selectOneByNo(guestbookVo.getNo());
+	}
+	
+	// ajax 삭제
+	public void exeDeleteAndGuest(GuestbookVo guestbookVo) {
+		
+	}
+	
+	
 }

@@ -5,6 +5,14 @@
 	<!-- 쿼리문작성 -->
 	<!-- <![CDATA[]]> -->
 	
+	<!-- 번호 저장후 필드 값 받아오기 
+	 	<selectKey keyProperty="no" resultType="int" order="AFTER">
+			<![CDATA[
+				select last_insert_id()
+			]]>
+		</selectKey> 
+	-->
+	
 	<!-- 리스트 가져오기 -->
 	<select id="list" resultType="com.javaex.vo.GuestbookVo">
 		<![CDATA[
@@ -14,7 +22,6 @@
 			        reg_date regDate
 			from guestbook
 			order by no desc
-			limit 3
 		]]>
 	</select>
 	
@@ -23,7 +30,20 @@
 		<![CDATA[
 			insert into guestbook
 			value(null, #{name}, #{password},#{content}, now())
+		]]>		
+	</insert>
+	
+	<!-- ajax 등록 - 등록한 후 no값 받아내기-->
+	<insert id="insertSelectKey" parameterType="com.javaex.vo.GuestbookVo">
+		<![CDATA[
+			insert into guestbook
+			value(null, #{name}, #{password}, #{content}, now())
 		]]>
+		<selectKey keyProperty="no" resultType="int" order="AFTER">
+			<![CDATA[
+				select last_insert_id()
+			]]>
+		</selectKey>
 	</insert>
 	
 	<!-- 삭제 -->
@@ -34,4 +54,19 @@
 			and password= #{password}
 		]]>
 	</delete>
+	
+	<!-- no값으로 한명데이터 가져오기 -->
+	<select id="selectOneByNo" parameterType="int" resultType="com.javaex.vo.GuestbookVo">
+		<![CDATA[
+			select	no,
+					name,
+					password,
+			        content,
+			        reg_date regDate
+			from guestbook
+			where no = #{no}
+		]]>
+	</select>
+	
+	
 </mapper>
