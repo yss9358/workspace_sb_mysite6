@@ -37,10 +37,4 @@ public class GuestbookService {
 		return guestbookDao.selectOneByNo(guestbookVo.getNo());
 	}
 	
-	// ajax 삭제
-	public void exeDeleteAndGuest(GuestbookVo guestbookVo) {
-		
-	}
-	
-	
 }

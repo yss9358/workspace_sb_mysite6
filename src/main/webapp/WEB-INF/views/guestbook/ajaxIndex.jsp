@@ -14,12 +14,33 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <style>
+	/* 모달창 배경 회색부분*/
 	.modal {
-		display : none;
-	}
+		width : 100%; /*가로 전체*/
+		height : 100%;  /*세로 전체*/
+		display : none; /* 시장할때 숨김처리*/
+		position : fixed; /* 화면 고정*/
+		left : 0; /*왼쪽에서 0에서 시작*/
+		top : 0 ; /* 위쪽에서 0 에서 시작*/
+		z-index : 999; /*제일위에*/
+		overflow : auto; /*내용이 많으면 스크롤 생김*/
+		background-color : rgba(0,0,0,0.4); /*배경이 검정색에 반투명*/
+ 	}
+ 	/* 모달창 내용 흰색부분 */
 	.modal .modal-content{
-		width : 818px;
-		border : 1px solid #000000;
+		width : 400px;
+		margin : 100px auto 100px auto; /*위에서 100xp 상함 100xp  - 좌우에서 가운데*/
+		padding : 0px 20px 20px 20px; /*안쪽 여백*/
+		background-color : #ffffff; /*배경색 흰색*/
+		border : 1px solid #888888; /*테두리 모양 색*/
+	}
+	/* 닫기 버튼 */
+	.modal .modal-content .closeBtn{
+		text-align : right;
+		color : #aaaaaa;
+		font-size : 28px;
+		font-weight : bold;
+		cursor : pointer;
 	}
 </style>
 </head>
@@ -81,13 +102,12 @@
 						<!-- //guestWrite -->
 						
 					</form>	
+					
 					<!-- 모달 창 컨텐츠 -->
 	               <div id="myModal" class="modal">
 	                  <div id="guestbook" class="modal-content">
 	                     <div class="closeBtn">×</div>
-	                     <div class="m-header">
-	                        패스워드를 입력하세요
-	                     </div>
+	                     <div class="m-header">패스워드를 입력하세요</div>
 	                     <div class="m-body">
 	                        <input type="password" name="password" value=""><br>
 	                        <input type="hidden" name="no" value="">
@@ -97,9 +117,11 @@
 	                     </div>
 	                  </div>
 	               </div>
+	               
 					<div id="guestbookListArea">
 						<!-- 방명록 글 올 자리 -->
 					</div>
+					
 				</div>
 				<!-- //guestbook -->
 			
@@ -115,61 +137,71 @@
 </body>
 
 <script>
+
 // DOM tree가 생성되었을때
-// document.addEventListener("DOMContentLoaded",function(){});
 document.addEventListener("DOMContentLoaded",function(){
 		
-	// 리스트 요청 데이터 받기
-	axios({
-		method: 'get', // put, post, delete 
-		url: '${pageContext.request.contextPath}/api/guestbooks',
-		headers: {"Content-Type" : "application/json; charset=utf-8"}, //전송타입 
-		//params: guestbookVo, //get방식 파라미터로 값이 전달 
-		//data: guestbookVo, //put, post, delete 방식 자동으로 JSON으로 변환 전달 
-	
-		responseType: 'json' //수신타입
-	}).then(function (response) {
-		//console.log(response); //수신데이타
-		
-		// 리스트 자리에 글 추가 ..
-		for(let i=0; i<response.data.length; i++){
-			let guestbookVo = response.data[i]
-			render(guestbookVo,"down"); // render() 함수를 만들어서 실행시킨다
-		}
-	}).catch(function (error) {
-		console.log(error);
-	});  // 리스트 요청 데이터 받기
+	// 리스트 가져오기 + 그리기 메소드
+	getListAndRender();
 
+	// 저장하기
+	document.querySelector("#guestForm").addEventListener("submit", addAndRender);
+	
+	// 모달창 호출 버튼 클릭했을 때  
+	document.querySelector("#guestbookListArea").addEventListener("click", callModal); 
+	
+	// 모달창 닫기 버튼 클릭했을 때 
+	document.querySelector(".closeBtn").addEventListener("click", closeModal); 
+	
+	// 삭제버튼 클릭 - 삭제기능
+	document.querySelector("#myModal button").addEventListener("click", deleteAndRemove); 
+	
+}); // document.addEventListener 끝
+
+//////////////////////////// 함수 정리 ///////////////////////////////////////////////
+
+
+	// getListAndRender 함수 - 리스트 가져오기 + 그리기
+	function getListAndRender(){
+		// 리스트 요청 데이터 받기
+		axios({
+			method: 'get', // put, post, delete 
+			url: '${pageContext.request.contextPath}/api/guestbooks',
+			headers: {"Content-Type" : "application/json; charset=utf-8"}, //전송타입 
+			//params: guestbookVo, //get방식 파라미터로 값이 전달 
+			//data: guestbookVo, //put, post, delete 방식 자동으로 JSON으로 변환 전달 
+		
+			responseType: 'json' //수신타입
+		}).then(function (response) {
+			//console.log(response); //수신데이타
+			// 리스트 자리에 글 추가 ..
+			for(let i=0; i<response.data.length; i++){
+				let guestbookVo = response.data[i]
+				render(guestbookVo,"down"); // render() 함수를 만들어서 실행시킨다
+			}
+		}).catch(function (error) {
+			console.log(error);
+		});  // 리스트 요청 데이터 받기
+	};
 	
 	
-	// 등록버튼을 눌렀을 때
-	//let guestForm = document.querySelector("#guestForm"); // 버튼잡기
-	document.querySelector("#guestForm").addEventListener("submit",function(event){
-		//console.log("submit");
+	
+	// 글 저장하고 그리기 - 등록버튼을 눌렀을 때
+	function addAndRender(event){
 		event.preventDefault();
 		
-		//let name = document.querySelector('#guestAdd>tbody input[name="name"]').value.trim;
-		//let password = document.querySelector('#guestAdd>tbody input[name="password"]').value.trim;
-		//let content = document.querySelector('#guestAdd>tbody textarea[name="content"]').value.trim;
-		//console.log(name);
-		//console.log(password);
-		//console.log(content);
 		let guestVo = {
 			name : document.querySelector('#guestAdd>tbody input[name="name"]').value,
 			password : document.querySelector('#guestAdd>tbody input[name="password"]').value,
 			content : document.querySelector('#guestAdd>tbody textarea[name="content"]').value,
 		};
-		//guestVo.name = name;
-		//guestVo.password = password;
-		//guestVo.content = content;
-		//console.log(guestVo);
 
 		axios({
 			method: 'post', // get(select), put(update), post(insert), delete(delete)
 			url: '${pageContext.request.contextPath}/api/guestbooks',
 			headers: {"Content-Type" : "application/json; charset=utf-8"}, //전송타입
-			params: guestVo, //get방식 파라미터로 값이 전달
-			//data: guestbookVo, //put, post, delete 방식 자동으로 JSON으로 변환 전달
+			//params: guestVo, //get방식 파라미터로 값이 전달
+			data: guestVo, //put, post, delete 방식 자동으로 JSON으로 변환 전달
 			
 			responseType: 'json' //수신타입
 		}) .then(function (response) {
@@ -183,83 +215,17 @@ document.addEventListener("DOMContentLoaded",function(){
 				console.log(error);
 		});
 		
-	});	 // 등록 끝
+	} // 등록 끝
 
 	
 	
-	// 모달창 호출 버튼 클릭했을 때  
-	document.querySelector("#guestbookListArea").addEventListener("click",function(event){
-		//console.log(event.target.tagName);
-		//console.log(this);
-		
-		// tagName 이 button 이면 모달창을 보이게 만들기
-		if(event.target.tagName == "BUTTON"){
-			//console.log("모달창");
-			document.querySelector(".modal").style.display = "block";
-			
-			// hidden 에 no값 넣기
-			//console.log(event.target.dataset.no);
-			document.querySelector('#myModal input[name="no"]').value = event.target.dataset.no;
-		}
-	}); // 모달창 호출 끝
-	
-	// 삭제버튼 클릭 - 삭제기능
-	document.querySelector("#myModal button").addEventListener("click",function(event){
-		//console.log("삭제");
-		
-		// 데이터 모으기
-		
-		let guestVo = {};
-		guestVo.no = document.querySelector('#myModal input[name="no"]').value;
-		guestVo.password = document.querySelector('#myModal input[name="password"]').value;
-		//console.log(guestVo);
-		
-		// 이벤트 잡기 
-		// 데이터수집
-		// 요청 - 서버쪽 요청처리
-		// 응답 - 데이터 수신
-		// 응답 화면에 반영 -- 수작업
-		axios({
-			method: 'post', // put, post, delete
-			url: '${pageContext.request.contextPath}/api/guestbooks/delete',
-			headers: {"Content-Type" : "application/json; charset=utf-8"}, //전송타입
-			params: guestVo, //get방식 파라미터로 값이 전달
-			data: guestVo, //put, post, delete 방식 자동으로 JSON으로 변환 전달
-			responseType: 'json' //수신타입
-		}) .then(function (response) {
-			console.log(response); //수신데이타
-			if(response.data==1){
-				let ko = document.querySelectorAll(".guestRead");
-				let noList = [];
-				for(let i=0; i<ko.length; i++){
-					let no = ko[i].children[1].firstElementChild.firstElementChild.textContent
-					if(no==guestVo.no){
-						ko[i].remove();
-						document.querySelector('#myModal input[name="no"]').value = "";
-						document.querySelector('#myModal input[name="password"]').value = "";
-						// 3개만 가져올때는 어케함?
-					}
-				}
-			}
-			document.querySelector(".modal").style.display = "none";
-		}) .catch(function (error) {
-			console.log(error);
-		}); 
-	
-	
-	}); // 삭제기능 끝
-	
-}); // document.addEventListener 끝
-
-//////////////////////////// 함수 정리 ///////////////////////////////////////////////
+	// render 함수 - guestbookListArea영역에 리스트 그리기
 	function render(guestbookVo, dir){
-		//console.log(guestbookVo); 
 		
 		let guestbookListArea = document.querySelector("#guestbookListArea");
-		//console.log(guestbookListArea);
 		//  ${pageContext.request.contextPath} 는 자바문법. 자바스크립트에서 사용할 수 있다.
 		let str = '';
-		str += ' <table class="guestRead"> ';
+		str += ' <table id="gr-' + guestbookVo.no + '" class="guestRead"> ';
 		str += ' 	<colgroup> ';
 		str += ' 		<col style="width: 10%;"> ';
 		str += ' 		<col style="width: 40%;"> ';
@@ -283,7 +249,64 @@ document.addEventListener("DOMContentLoaded",function(){
 			guestbookListArea.insertAdjacentHTML("beforeend",str);
 		}
 		
-	};// render 함수 끝
+	} // render 함수 끝
+	
+	
+	
+	// 모달창 보이기 - 버튼을 클릭했을 때 
+	function callModal(event){
+		// tagName 이 button 이면 모달창을 보이게 만들기
+		if(event.target.tagName == "BUTTON"){
+			//console.log("모달창");
+			document.querySelector(".modal").style.display = "block";
+			
+			// hidden 에 no값 넣기 - console.log(event.target.dataset.no);
+			document.querySelector('#myModal input[name="no"]').value = event.target.dataset.no;
+			// password 비우기
+			document.querySelector('#myModal input[name="password"]').value = "";
+		}
+	} // 모달창 호출 끝
+	
+	
+	
+	// 모달창 숨기기 - 닫기 버튼 클릭했을 때 
+	function closeModal(event){
+		// modal창을 안보이게 none으로 바꿔준다
+		document.querySelector('#myModal').style.display = "none";
+	} //모달창 닫기버튼 끝
+	
+	
+	
+	
+	// 데이터 삭제 + 화면 새로 그리기
+	function deleteAndRemove(event){
+		// 데이터 모으기 - url에 값이 들어가면 만들어둔 vo에 같이 값이 넘어간다
+		let guestVo = {};
+		//guestVo.no = document.querySelector('#myModal input[name="no"]').value;
+		guestVo.password = document.querySelector('#myModal input[name="password"]').value;
+		//console.log(guestVo);
+		axios({
+			method: 'delete', // put, post, delete
+			url: '${pageContext.request.contextPath}/api/guestbooks/' + document.querySelector('#myModal input[name="no"]').value,
+			headers: {"Content-Type" : "application/json; charset=utf-8"}, //전송타입
+			params: guestVo, //get방식 파라미터로 값이 전달
+			//data: guestVo, //put, post, delete 방식 자동으로 JSON으로 변환 전달
+			responseType: 'json' //수신타입
+			
+		}) .then(function (response) {
+			//console.log(response); //수신데이타
+			if(response.data==1){ // 삭제가 됐을때 
+				// 테이블에 아이디를 추가해서 찾아낸다
+				//let removeTable = document.querySelector("#gr-" + document.querySelector('#myModal input[name="no"]').value);
+				document.querySelector("#gr-" + document.querySelector('#myModal input[name="no"]').value).remove();
+				document.querySelector('#myModal input[name="no"]').value = "";
+				document.querySelector('#myModal input[name="password"]').value = "";
+			}
+			document.querySelector(".modal").style.display = "none";
+		}) .catch(function (error) {
+			console.log(error);
+		}); 
+	}// 삭제기능 끝
 	
 	
 //////////////////////////// 함수 정리 끝 ////////////////////////////////////////////

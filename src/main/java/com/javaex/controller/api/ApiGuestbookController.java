@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,14 +33,14 @@ public class ApiGuestbookController {
 	// 글 등록
 	@ResponseBody
 	@RequestMapping(value="/api/guestbooks", method = RequestMethod.POST)
-	public GuestbookVo add(@ModelAttribute GuestbookVo guestbookVo) {
+	public GuestbookVo add(@RequestBody GuestbookVo guestbookVo) {
 		return guestbookService.exeAddAndGuest(guestbookVo);
 	}
 	
-	// 글 삭제
-	@ResponseBody
-	@RequestMapping(value="/api/guestbooks/delete", method = RequestMethod.POST)
-	public int delete(@ModelAttribute GuestbookVo guestbookVo) {
+	// 글 삭제               // 
+	@ResponseBody          // {no} 는 변수, no값을 정의하려면 (@PathVariable("변수값") 자료형 변수명) 으로 작성
+	@RequestMapping(value="/api/guestbooks/{no}", method = RequestMethod.DELETE)
+	public int remove(@ModelAttribute GuestbookVo guestbookVo) {
 		int count = guestbookService.exeDelete(guestbookVo);
 		return count;
 	}
