@@ -15,7 +15,7 @@
 
 <style>
 	.modal {
-		display : block;
+		display : none;
 	}
 	.modal .modal-content{
 		width : 818px;
@@ -90,7 +90,7 @@
 	                     </div>
 	                     <div class="m-body">
 	                        <input type="password" name="password" value=""><br>
-	                        <input type="text" name="no" value="">
+	                        <input type="hidden" name="no" value="">
 	                     </div>
 	                     <div class="m-footer">
 	                        <button class="btnDelete" type="submit">삭제</button>
@@ -241,7 +241,7 @@ document.addEventListener("DOMContentLoaded",function(){
 					}
 				}
 			}
-			
+			document.querySelector(".modal").style.display = "none";
 		}) .catch(function (error) {
 			console.log(error);
 		}); 
