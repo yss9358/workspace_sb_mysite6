@@ -19,7 +19,7 @@
 			<div id="aside">
 				<h2>갤러리</h2>
 				<ul>
-					<li><a href="">일반갤러리</a></li>
+					<li><a href="${pageContext.request.contextPath}/gallery/list">일반갤러리</a></li>
 					<li><a href="${pageContext.request.contextPath}/attach/uploadform">파일첨부연습</a></li>
 				</ul>
 			</div>

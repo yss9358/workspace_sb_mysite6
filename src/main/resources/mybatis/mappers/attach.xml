@@ -9,7 +9,7 @@
 	<insert id="insertFile" parameterType="com.javaex.vo.AttachVo">
 		<![CDATA[
 			insert into attach
-			value (null, #{orgName}, #{saveName}, #{filePath}, #{fileSize})
+			value (null, #{orgName}, #{saveName}, #{filePath}, #{fileSize}, null, 5)
 		]]>
 	</insert>
 
