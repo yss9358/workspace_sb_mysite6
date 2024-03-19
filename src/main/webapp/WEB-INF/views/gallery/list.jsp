@@ -13,6 +13,10 @@
 		display : none;
 		width : 100%;
 		height : 100%;
+		position : fixed;
+		left : 0;
+		top : 0;
+		z-index : 999;
 		overflow : auto;
 		background-color : rgba(0,0,0,0.4); 
 	};
@@ -81,7 +85,7 @@
                      <!-- 이미지반복영역 -->
                      <li>
                         <div class="view">
-                           <img class="imgItem" src="${pageContext.request.contextPath}/upload/${list.saveName}" id="img-${list.no}">
+                           <img class="imgItem" src="${pageContext.request.contextPath}/upload/${list.saveName}" data-no="${list.no}" data-content="${list.content}">
                            <div class="imgWriter">
                               작성자: <strong>${list.name}</strong>
                            </div>
@@ -130,14 +134,14 @@
    <div id="viewModal" class="modal">
       <div class="modal-content">
          <div class="closeBtn">×</div>
-         <div class="m-header">간단한 타이틀</div>
+         <div class="m-header">이미지 보기</div>
          <div class="m-body">
             <div>
                <img id="viewModelImg" src="">
                <!-- ajax로 처리 : 이미지출력 위치-->
             </div>
             <div>
-               <p id="viewModelContent"></p>
+               <p id="viewModelContent">asd</p>
             </div>
          </div>
          <div class="m-footer">
@@ -157,10 +161,33 @@
 // DOM tree 완료 시점
 document.addEventListener("DOMContentLoaded",function(event){
 	//console.log("DOM tree 생성");
+	event.preventDefault();
+	let view = document.querySelector("#viewArea");
 	
-	let img = document.querySelectorAll(".view img");
-	console.log(img);
+	// 사진클릭했을때
+	view.addEventListener("click",function(event){
+		//console.log("click");
+		//console.log(event.target);
+		if(event.target.tagName == "IMG"){
+			//console.log(event.target.dataset.no);
+			//console.log(document.querySelector("img").dataset.no)
+			let viewModal = document.querySelector("#viewModal");
+			viewModal.style.display = "block";
+			let v = document.querySelector("img").dataset.content;
+			console.log(v);
+			let content = document.querySelector("#viewModal p");
+			
+		//	content.textContent = "";
+		//	document.querySelector("img").dataset.no;
+			
+			
+			
+		}
+		
+		
+	});
 	
+	// 등록폼 보이기
 	document.querySelector("#btnImgUpload").addEventListener("click", function(event){
 		event.preventDefault();
 		let addModal = document.querySelector("#addModal");

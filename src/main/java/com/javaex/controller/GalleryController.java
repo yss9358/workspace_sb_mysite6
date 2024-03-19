@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.javaex.service.GalleryService;
@@ -26,11 +27,12 @@ public class GalleryController {
 		return "gallery/list";
 	}
 	
+	// 사진 보이기
 	@RequestMapping(value="/gallery/upload", method = RequestMethod.POST)
 	public void upload() {
 		
 	}
-
+	// 이미지 등록
 	@RequestMapping(value="/gallery/add", method = RequestMethod.POST)
 	public String add(@ModelAttribute GalleryVo galleryVo, @RequestParam(value="file") MultipartFile file) {
 		int count = galleryService.exeAdd(galleryVo,file);
@@ -40,5 +42,13 @@ public class GalleryController {
 			return "redirect:/main";
 		}
 	}
+	
+	// 한명데이터 가져오기
+	@RequestMapping(value="/gallery/images", method = RequestMethod.GET)
+	public String getImage() {
+		System.out.println("getImage");
+		return "";
+	}
+	
 	
 }
