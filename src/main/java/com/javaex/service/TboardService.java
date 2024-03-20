@@ -47,7 +47,7 @@ public class TboardService {
 //		}
 //		
 
-//		한페이지당 출력 글 갯수
+//		한페이지당 출력 글 갯수 - 직접 정해야함 . 
 		int listCount = 10;
 		
 //		시작번호 row번호
