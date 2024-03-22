@@ -180,12 +180,12 @@ document.addEventListener("DOMContentLoaded",function(event){
 		//	content.textContent = "";
 		//	document.querySelector("img").dataset.no;
 			
-			
-			
+
 		}
-		
-		
+
 	});
+	
+	
 	
 	// 등록폼 보이기
 	document.querySelector("#btnImgUpload").addEventListener("click", function(event){
@@ -193,9 +193,15 @@ document.addEventListener("DOMContentLoaded",function(event){
 		let addModal = document.querySelector("#addModal");
 		addModal.style.display = "block";
 	});
+	
+	
 	   
 });
    
+   
+//////////////////////////////////// 함수 //////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////
    
 </script>
 
