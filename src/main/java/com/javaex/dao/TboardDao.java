@@ -47,7 +47,7 @@ public class TboardDao {
 	}
 	
 	
-	// 리스트(검색O, 페이징 O)
+	// 리스트3(검색O, 페이징 O)
 	public List<TboardVo> boardSelectList3(Map<String, Object> limitMap){
 		List<TboardVo> boardList= sqlSession.selectList("tboard.selectList3",limitMap);
 		return boardList;
